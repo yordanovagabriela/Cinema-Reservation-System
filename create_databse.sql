@@ -1,4 +1,4 @@
-PRAGMA foreign_keys = ON;
+-- PRAGMA foreign_keys = ON;
 
 DROP TABLE IF EXISTS movies;
 
@@ -48,6 +48,21 @@ INSERT INTO reservations VALUES(null, 'Ivo', 3, 1,1);
 INSERT INTO reservations VALUES(null, 'Ivo', 3, 1,2);
 INSERT INTO reservations VALUES(null, 'Mysterious', 5, 2, 3);
 INSERT INTO reservations VALUES(null, 'Mysterious', 5, 2, 4);
+
+DROP TABLE IF EXISTS reserved_seats;
+
+CREATE TABLE IF NOT EXISTS reserved_seats (
+	projection_id INTEGER DEFAULT 100,
+	seats INTEGER,
+	FOREIGN KEY(projection_id) REFERENCES projections(projection_id)
+    );
+
+INSERT INTO reserved_seats VALUES(1, 3);
+INSERT INTO reserved_seats VALUES(2, 0);
+INSERT INTO reserved_seats VALUES(3, 2);
+INSERT INTO reserved_seats VALUES(4, 0);
+INSERT INTO reserved_seats VALUES(5, 2);
+INSERT INTO reserved_seats VALUES(6, 0);
 
 
 -- import sqlite3
