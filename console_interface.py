@@ -5,12 +5,15 @@ import sys
 
 
 class ConsoleInterface:
+
+    OCCUPIED_PLACE = 'X'
+
     def __init__(self):
         self.database = Commands('cinema.db')
         self.commands = {
             "show_movies": self.show_movies,
             "show_movie_projections": self.show_movie_projections,
-            "grid": self.grid,
+            "grid": self.print_grid,
             "make_reservation": self.make_reservation,
             # "finalize": self.finalize,
             # "give_up": self.give_up,
@@ -44,26 +47,37 @@ class ConsoleInterface:
 
     def make_reservation(self):
 
-# Step 1:
         name = input('Step 1 (User): Choose name>')
         tickets = input('Step 1 (User): Choose number of tickets>')
         self.show_movies()
 
-# Step 2:
         self.show_movie_projections(reservation=True)
 
-# Step 3:
         projection_id = input('Step 3 (Projection): Choose a projection>')
         print('Available seats (marked with a dot):')
-        self.grid(projection_id)
+        self.print_grid(projection_id)
 
-# Step 4:
+        self.manage_tickets(tickets, projection_id)
+
+    def manage_tickets(self, tickets, projection_id):
         tuple_list = []
-        for i in range(1, 1 + int(tickets)):
-            seats = input('Step 4 (Seats): Choose seat {}>'.format(i))
-            tuple_list.append((seats[0], seats[1]))
+        grid = self.database.available_seats(projection_id)
+        step = 1
 
-    def grid(self, projection_id):
+        while (step - 1) != int(tickets):
+            user_input = input('Step 4 (Seats): Choose seat {}>'.format(step))
+            seat = eval(user_input)
+            row = seat[0]
+            col = seat[1]
+            if row > 10 or col > 10 or row == 0 or col == 0:
+                print('Lol...NO!')
+            elif grid[row][col] == self.OCCUPIED_PLACE:
+                print('This seat is already taken!')
+            else:
+                tuple_list.append((row, col))
+                step += 1
+
+    def print_grid(self, projection_id):
         a = self.database.available_seats(projection_id)
         for i in a:
             print(' '.join(i))

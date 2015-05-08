@@ -3,6 +3,8 @@ import sqlite3
 
 class Commands:
 
+    OCCUPIED_SEAT = 'X'
+
     def __init__(self, database):
         self.connection = sqlite3.connect(database)
         self.connection.row_factory = sqlite3.Row
@@ -14,7 +16,8 @@ class Commands:
 
     def show_movie_projections(self, movie_id):
         return self.cursor.execute("""SELECT
-            reserved_seats.seats,movies.name, projections.projection_id, projections.date_projection, projections.type,
+            reserved_seats.seats,movies.name, projections.projection_id, projections.date_projection,
+            projections.type,
             projections.time FROM reserved_seats, projections
             JOIN movies ON projections.movie_id = ?  and projections.movie_id = movies.movie_id
         and projections.projection_id = reserved_seats.projection_id
@@ -39,23 +42,6 @@ class Commands:
         ]
 
         for el in rc:
-            grid[el['row']][el['col']] = 'X'
+            grid[el['row']][el['col']] = self.OCCUPIED_SEAT
 
         return grid
-
-
-
-        #     reserved_seats.seats,movies.name, projections.projection_id, projections.date_projection, projections.type,
-        #     projections.time FROM reserved_seats, projections
-        #     JOIN movies ON projections.movie_id = 2  and projections.movie_id = movies.movie_id
-        # and projections.projection_id = reserved_seats.projection_id
-        #     ORDER BY projections.date_projection
-
-
-
-        # return self.cursor.execute("""SELECT
-        #     movies.name, projections.projection_id, projections.date_projection, projections.type,
-        #     projections.time FROM projections
-        #     JOIN movies ON projections.movie_id = ? and projections.movie_id = movies.movie_id
-        #     ORDER BY projections.date_projection
-        #                 """, (movie_id,))
