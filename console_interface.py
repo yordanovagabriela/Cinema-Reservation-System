@@ -29,7 +29,7 @@ class ConsoleInterface:
         for movie in movies:
             print('[{}] - {} ({})'.format(movie['movie_id'], movie['name'], movie['rating']))
 
-    def show_movie_projections(self, reservation = False):
+    def show_movie_projections(self, reservation=False):
         movie_id = input('Choose a movie>')
         projections = self.database.show_movie_projections(movie_id)
         label = True
@@ -58,8 +58,10 @@ class ConsoleInterface:
         self.grid(projection_id)
 
 # Step 4:
+        tuple_list = []
         for i in range(1, 1 + int(tickets)):
             seats = input('Step 4 (Seats): Choose seat {}>'.format(i))
+            tuple_list.append((seats[0], seats[1]))
 
     def grid(self, projection_id):
         a = self.database.available_seats(projection_id)
