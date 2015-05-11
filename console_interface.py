@@ -54,16 +54,21 @@ class ConsoleInterface:
     def make_reservation(self):
 
         name = input('Step 1 (User): Choose name>')
+        if name == "give_up":
+            self.give_up()
         tickets = input('Step 1 (User): Choose number of tickets>')
-
+        if tickets == "give_up":
+            self.give_up()
         self.show_movies()
 
         movie_id = input('Step 2 (Movie): Choose a movie>')
-
+        if movie_id == "give_up":
+            self.give_up()
         self.show_movie_projections(movie_id, reservation=True)
 
         projection_id = input('Step 3 (Projection): Choose a projection>')
-
+        if projection_id == "give_up":
+            self.give_up()
         print('Available seats (marked with a dot):')
 
         self.print_grid(projection_id)
@@ -73,6 +78,8 @@ class ConsoleInterface:
         command = input('Step 5 (Confirm - type "finalize") >')
         if command == 'finalize':
             self.finalize(name, projection_id, self.tuple_list)
+        if command == "give_up":
+            self.give_up()
 
     def manage_tickets(self, tickets, projection_id):
         grid = self.database.available_seats(projection_id)
@@ -112,7 +119,7 @@ class ConsoleInterface:
             print(' '.join(i))
 
     def give_up(self):
-        print('GAVE UP!')
+        self.read_command()
 
     def help(self):
         RED = '\033[91m'
